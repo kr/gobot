@@ -5,3 +5,8 @@ use it like this:
     $ cd $GOPATH
     $ tar cf x.tar src
     $ curl -O -T x.tar http://example.org/build/foo/bar
+
+uses go get to fetch dependencies (hg and bzr
+are not yet available); to fix the version of
+any dependencies, provide source code in the
+tarball you post.
