@@ -1,1 +1,7 @@
 build bot for go
+
+use it like this:
+
+    $ cd $GOPATH
+    $ tar cf x.tar src
+    $ curl -O -T x.tar http://example.org/build/foo/bar
