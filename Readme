@@ -1,12 +1,33 @@
-build bot for go
+Build bot for Go
 
-use it like this:
+USE IT
+
+/build
+
+It expects a request to /build/package with a request entity
+that's a tar file containing the src directory of a Go workspace.
+
+To build package foo/bar, you could do:
 
     $ cd $GOPATH
-    $ tar cf x.tar src
+    $ tar cf x.tar --exclude .git src
     $ curl -O -T x.tar http://example.org/build/foo/bar
 
-uses go get to fetch dependencies (hg and bzr
-are not yet available); to fix the version of
-any dependencies, provide source code in the
-tarball you post.
+The build bot uses go get to fetch missing dependencies (but hg
+and bzr are not yet available); to fix the version of any
+dependencies, provide source code in the tarball you post.
+
+/info
+
+You can also request /info to see the output of go version and
+go tool dist env.
+
+RUN IT
+
+This is a heroku app. To run it yourself:
+
+    $ git clone https://github.com/kr/gobot.git
+    $ cd gobot
+    $ heroku create -b https://github.com/kr/heroku-buildpack-go.git
+    $ git push heroku master
+
