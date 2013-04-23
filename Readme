@@ -1,11 +1,10 @@
 Build bot for Go
 
-USE IT
-
-/build
+GET /build
 
 It expects a request to /build/package with a request entity
 that's a tar file containing the src directory of a Go workspace.
+(For convenient use with curl, method PUT is also accepted.)
 
 To build package foo/bar, you could do:
 
@@ -15,9 +14,9 @@ To build package foo/bar, you could do:
 
 The build bot uses go get to fetch missing dependencies (but hg
 and bzr are not yet available); to fix the version of any
-dependencies, provide source code in the tarball you post.
+dependencies, provide source code in the tarball you send.
 
-/info
+GET /info
 
 You can also request /info to see the output of go version and
 go tool dist env.
