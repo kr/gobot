@@ -65,6 +65,7 @@ func handleBuild(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	_, err := io.Copy(w, j.bin)
+	j.bin.Close()
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "internal error", 500)
@@ -145,7 +146,7 @@ type job struct {
 	tar    io.Reader
 	pkg    string
 	gopath string
-	bin    io.Reader
+	bin    io.ReadCloser
 	out    []byte
 	err    error
 	done   chan struct{}
