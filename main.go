@@ -1,8 +1,7 @@
 package main
 
 import (
-	"archive/tar"
-	"fmt"
+	"github.com/kr/tarutil"
 	"io"
 	"log"
 	"net/http"
@@ -10,7 +9,6 @@ import (
 	"os/exec"
 	"path"
 	"strconv"
-	"strings"
 )
 
 const (
@@ -84,7 +82,10 @@ func worker(n int) {
 
 func build(j *job, gopath string) error {
 	defer os.RemoveAll(gopath)
-	err := untar(tar.NewReader(j.tar), gopath)
+	if err := os.RemoveAll(gopath); err != nil {
+		return err
+	}
+	err := tarutil.ExtractAll(j.tar, gopath, 0)
 	if err != nil {
 		return err
 	}
@@ -100,46 +101,6 @@ func goget(gopath, pkg string) ([]byte, error) {
 	cmd := exec.Command("go", "get", pkg)
 	cmd.Env = append(os.Environ(), "GOPATH="+gopath)
 	return cmd.CombinedOutput()
-}
-
-func untar(tr *tar.Reader, dir string) error {
-	if err := os.RemoveAll(dir); err != nil {
-		return err
-	}
-	for {
-		hdr, err := tr.Next()
-		if err == io.EOF {
-			break
-		} else if err != nil {
-			return err
-		}
-		if !strings.HasPrefix(hdr.Name, "src/") {
-			return fmt.Errorf("bad path: %q", hdr.Name)
-		}
-		path := path.Join(dir, hdr.Name)
-		switch hdr.Typeflag {
-		case tar.TypeReg, tar.TypeRegA:
-			f, err := os.Create(path)
-			if err != nil {
-				return err
-			}
-			if _, err = io.Copy(f, tr); err != nil {
-				return err
-			}
-			if err = f.Close(); err != nil {
-				return err
-			}
-		case tar.TypeDir:
-			if err := os.MkdirAll(path, 0777); err != nil {
-				return err
-			}
-		case tar.TypeXHeader, tar.TypeXGlobalHeader:
-			// ignore
-		default:
-			return fmt.Errorf("unsupported tar entry type %q", hdr.Typeflag)
-		}
-	}
-	return nil
 }
 
 type job struct {
