@@ -27,6 +27,6 @@ This is a heroku app. To run it yourself:
 
     $ git clone https://github.com/kr/gobot.git
     $ cd gobot
-    $ heroku create -b https://github.com/kr/heroku-buildpack-go.git
+    $ heroku create -b https://github.com/kr/heroku-buildpack-inline.git
     $ git push heroku master
 
