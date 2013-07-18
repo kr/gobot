@@ -13,13 +13,11 @@ touch /tmp/fake/bzr
 chmod +x /tmp/fake/bzr
 
 url=https://raw.github.com/kr/heroku-buildpack-go/master/bin/compile
-curl -s $url|bash /dev/stdin "$@"
+curl -s -o /tmp/buildpack.sh $url
+source /tmp/buildpack.sh "$@" # sets GOROOT
 
-file=go1.0.3.$(uname|tr A-Z a-z)-amd64.tar.gz
-url=http://go.googlecode.com/files/$file
-curl -sO $url
-tar zxf $file
-rm -f $file
+mkdir -p $HOME/go
+cp -a $GOROOT/* $HOME/go
 
 cat <<'end' >.profile.d/runtime-go.sh
 GOROOT=$HOME/go export GOROOT
