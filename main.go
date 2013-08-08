@@ -9,6 +9,7 @@ import (
 	"os/exec"
 	"path"
 	"strconv"
+	"time"
 )
 
 const (
@@ -62,12 +63,8 @@ func handleBuild(w http.ResponseWriter, r *http.Request) {
 		w.Write(j.out)
 		return
 	}
-	_, err := io.Copy(w, j.bin)
-	j.bin.Close()
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "internal error", 500)
-	}
+	defer j.bin.Close()
+	http.ServeContent(w, r, "", time.Time{}, j.bin)
 }
 
 func worker(n int) {
@@ -107,7 +104,7 @@ type job struct {
 	tar    io.Reader
 	pkg    string
 	gopath string
-	bin    io.ReadCloser
+	bin    *os.File
 	out    []byte
 	err    error
 	done   chan struct{}
