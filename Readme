@@ -2,7 +2,20 @@ Build bot for Go
 
 GET /build
 
-It expects a request to /build/package with a request entity
+It expects a request to /build/importpath to build the package
+at importpath.
+
+To build command github.com/kr/s3/s3cp, you could do:
+
+    $ curl -O http://example.org/build/github.com/kr/s3/s3cp
+
+The build bot uses go get to fetch missing dependencies (but hg
+and bzr are not yet available); to fix the version of any
+dependencies, or to provide private code, see method PUT below.
+
+PUT /build
+
+It expects a request to /build/importpath with a request entity
 that's a tar file containing the src directory of a Go workspace.
 (For convenient use with curl, method PUT is also accepted.)
 
@@ -11,10 +24,6 @@ To build command github.com/kr/s3/s3cp, you could do:
     $ cd $GOPATH
     $ tar cf x.tar --exclude .git src/github.com/kr/s3
     $ curl -O -T x.tar http://example.org/build/github.com/kr/s3/s3cp
-
-The build bot uses go get to fetch missing dependencies (but hg
-and bzr are not yet available); to fix the version of any
-dependencies, provide source code in the tarball you send.
 
 GET /info
 
