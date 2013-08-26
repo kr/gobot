@@ -7,7 +7,7 @@ at importpath.
 
 To build command github.com/kr/s3/s3cp, you could do:
 
-    $ curl -O http://example.org/build/github.com/kr/s3/s3cp
+    $ curl -O https://gobot-builder.herokuapp.com/build/github.com/kr/s3/s3cp
 
 The build bot uses go get to fetch missing dependencies (but hg
 and bzr are not yet available); to fix the version of any
@@ -23,7 +23,7 @@ To build command github.com/kr/s3/s3cp, you could do:
 
     $ cd $GOPATH
     $ tar cf x.tar --exclude .git src/github.com/kr/s3
-    $ curl -O -T x.tar http://example.org/build/github.com/kr/s3/s3cp
+    $ curl -O -T x.tar https://gobot-builder.herokuapp.com/build/github.com/kr/s3/s3cp
 
 GET /info
 
