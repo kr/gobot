@@ -13,7 +13,7 @@ touch /tmp/fake/bzr
 chmod +x /tmp/fake/bzr
 
 url=https://raw.github.com/kr/heroku-buildpack-go/master/bin/compile
-curl -s -o /tmp/buildpack.sh $url
+curl -s -o /tmp/buildpack.sh -L $url
 source /tmp/buildpack.sh "$@" # sets GOROOT
 
 mkdir -p $HOME/go
